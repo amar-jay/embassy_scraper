@@ -1,34 +1,29 @@
-package main 
+package main
 
 import (
 	"github.com/gocolly/colly/v2"
 )
 
-const URL = "https://cd.mfa.gov.tr/mission/mission-list?clickedId=3"
-const STORE_FILE = "./store.json"
+const URL = "https://cd.mfa.gov.tr/mission/"
+const STORE_FILE = "storage.json"
+
 func main() {
-	c := colly.NewCollector(
-		colly.AllowedDomains()
+
+	var c = colly.NewCollector(
+		colly.AllowedDomains(),
 	)
-	file, err := os.Open(file)
-	if err != nil {
+	var store = NewStore[AccountInfo](STORE_FILE)
+	defer store.Close()
+
+	// scrape(c, store)
+	// file_creation(c, store)
+	// info_scrape(c, store)
+	// country_names(store)
+
+	if err := store.Save(); err != nil {
 		panic(err)
 	}
-
-	store := NewStore(STORE_FILE, AccountInfo{})
-	c.OnHTML("li[data-griddercontent]", func(e *colly.HTMLElement) {
-		div := e.Id("MissionsList")
-		country_id := e.Attr("data-griddercontent").Split("=")[1]		
-		country_name := e.ChildText("span")
-	})
-
-	c.OnHTML("li[data-griddercontent]>span", func(e *colly.HTMLElement) {
-		e.ChildText()
-	})
-	c.OnRequest(func(r *colly.Request) {
-		fmt.Println("Visiting", r.URL)
-	})
-
-	c.Visit(URL)
-
+	if err := store.Flush(); err != nil {
+		panic(err)
+	}
 }
