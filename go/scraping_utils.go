@@ -7,6 +7,8 @@ import (
 	"os"
 	"strings"
 
+	. "scraper/store"
+
 	"github.com/gocolly/colly/v2"
 )
 
@@ -45,7 +47,7 @@ func file_creation(c *colly.Collector, store Store[AccountInfo]) {
 		perm := fs.FileMode(0777)
 		// join "details" directory with country name
 		fmt.Printf("%+v\n", ai)
-		file := fmt.Sprintf("html/%s_%02d.html", ai.Name, i)
+		file := fmt.Sprintf("cache/html/%s_%02d.html", ai.Name, i)
 		f, err := os.OpenFile(file, os.O_CREATE|os.O_APPEND|os.O_RDWR, perm)
 		if err != nil {
 			panic(err)
@@ -84,7 +86,7 @@ func info_scrape(c *colly.Collector, store Store[AccountInfo]) {
 			sb.WriteString(line + "\n")
 		}
 
-		file := fmt.Sprintf("details/%s.txt", ai.Name)
+		file := fmt.Sprintf("cache/details/%s.txt", ai.Name)
 		perm := fs.FileMode(0777)
 		outliersFile, _ := os.OpenFile("outliers.txt", os.O_CREATE|os.O_APPEND|os.O_RDWR, perm)
 		f, _ := os.OpenFile(file, os.O_CREATE|os.O_RDWR, perm)

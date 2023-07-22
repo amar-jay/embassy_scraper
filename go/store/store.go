@@ -1,4 +1,4 @@
-package main
+package store
 
 import (
 	"bufio"
@@ -55,10 +55,10 @@ var (
 	ErrKeyNotFound = errors.New("key not found")
 )
 
-func NewStore[T Data](file string) Store[T] {
+func NewStore[T Data](file_suffix string) Store[T] {
 
 	perm := fs.FileMode(0777)
-	file = fmt.Sprintf("store/%s", strconv.Itoa(rand.Int())+"_"+file)
+	file := fmt.Sprintf("cache/store/%s", strconv.Itoa(rand.Int())+"_"+file_suffix)
 	f, err := os.OpenFile(file, os.O_CREATE|os.O_APPEND|os.O_RDWR, perm)
 	// f, err := os.CreateTemp("store", "*.json")
 	if err != nil {

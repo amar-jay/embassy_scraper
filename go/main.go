@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/gocolly/colly/v2"
+	. "scraper/store"
 )
 
 const URL = "https://cd.mfa.gov.tr/mission/"
@@ -9,9 +9,9 @@ const STORE_FILE = "storage.json"
 
 func main() {
 
-	var c = colly.NewCollector(
-		colly.AllowedDomains(),
-	)
+	// var c = colly.NewCollector(
+	// 	colly.AllowedDomains(),
+	// )
 	var store = NewStore[AccountInfo](STORE_FILE)
 	defer store.Close()
 
